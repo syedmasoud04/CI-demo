@@ -2,29 +2,22 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo 'building'
-                sh 'ls -l'
+                sh 'docker build -t ci-demo:latest .'
             }
         }
 
-        stage('Test') {
+        stage('Test Image') {
             steps {
-                echo 'testing'
-                sh 'cat app.txt'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'deploy'
+                sh 'docker run --rm -p 8080:8080ci-demo:latest'
             }
         }
     }
